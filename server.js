@@ -31,6 +31,8 @@ db.sequelize.sync({ force: true }).then(() => {
 })
 
 function init() {
+
+    //Initializing few Categories
     var categories = [
         {
             name: "Electronics",
@@ -54,6 +56,7 @@ function init() {
  * Importing the routes and using it
  */
 require('./routes/category.routes')(app);
+require('./routes/product.routes')(app);
 
 
 //Starting the server
