@@ -12,7 +12,7 @@ backend  and fullstack course
 * Unit Testing the eCommerce Applications
 
 ## How is the code organized in this repo ?
-Separate branch for separare class. For example, code to be taugh in the session1 planned to eCommerce app
+Separate branch for separare class. For example, code to be taugh in the session1 planned for eCommerce app
 is available in the branch name _session1_
 
 
