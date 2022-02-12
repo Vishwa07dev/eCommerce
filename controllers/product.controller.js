@@ -4,32 +4,21 @@
  * controller file will be executed.
  */
 
-const { product } = require("../models");
 const db = require("../models");
 const Product = db.product;
+const Category = db.category;
+const Op = db.Sequelize.Op;
 
 /**
  * Create and save a new Product
  */
 exports.create = (req, res) => {
-    /**
-     * Validation of the request body
-     */
 
-    if (!req.body.name) {
-        res.status(400).send({
-            message: "Name of the product can't be empty !"
-        })
-        return;
-    }
-
-    /**
-     * Creation of the Product object to be stored in the DB
-     */
     const product = {
         name: req.body.name,
         description: req.body.description,
-        cost : req.body.cost
+        cost: req.body.cost,
+        categoryId: req.body.categoryId
     };
 
     /**
@@ -44,6 +33,8 @@ exports.create = (req, res) => {
             message: "Some Internal error while storing the product!"
         })
     })
+
+
 }
 
 /**
@@ -53,15 +44,44 @@ exports.findAll = (req, res) => {
 
     //Supporting the query param
     let productName = req.query.name;
-    let promise ;
-    if(productName){
+    let minCost = req.query.minCost;
+    let maxCost = req.query.maxCost;
+    let promise;
+    if (productName) {
         promise = Product.findAll({
-            where : {
-                name : productName
+            where: {
+                name: productName
             }
         });
-    }else{
-        promise =  Product.findAll();
+    } else if (minCost && maxCost) {
+
+        promise = Product.findAll({
+            where: {
+                cost: {
+                    [Op.gte]: minCost,
+                    [Op.lte]: maxCost
+                }
+            }
+        });
+    }else if(minCost){
+        promise = Product.findAll({
+            where: {
+                cost: {
+                    [Op.gte]: minCost
+                }
+            }
+        });
+    }else if(maxCost){
+        promise = Product.findAll({
+            where: {
+                cost: {
+                    [Op.lte]: maxCost
+                }
+            }
+        });
+    }
+    else {
+        promise = Product.findAll();
     }
     promise.then(products => {
         res.status(200).send(products);
@@ -94,22 +114,12 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
 
     /**
-     * Validation of the request body
-     */
-
-    if (!req.body.name) {
-        res.status(400).send({
-            message: "Name of the product can't be empty !"
-        })
-        return;
-    }
-
-    /**
      * Creation of the Product object to be stored in the DB
      */
     const product = {
         name: req.body.name,
-        description: req.body.description
+        description: req.body.description,
+        categoryId: req.body.categoryId
     };
     const productId = req.params.id;
 
@@ -117,7 +127,6 @@ exports.update = (req, res) => {
         returning: true,
         where: { id: productId }
     }).then(updatedProduct => {
-
         Product.findByPk(productId).then(product => {
             res.status(200).send(product);
         }).catch(err => {
@@ -135,18 +144,18 @@ exports.update = (req, res) => {
 /**
  * Delete an existing product based on the product name
  */
- exports.delete = (req, res) => {
+exports.delete = (req, res) => {
     const productId = req.params.id;
 
     Product.destroy({
-        where: { 
-            id: productId 
+        where: {
+            id: productId
         }
     }).then(result => {
         res.status(200).send(
             {
-            message: "Successfully deleted the product"
-        }
+                message: "Successfully deleted the product"
+            }
         );
     }).catch(err => {
         res.status(500).send({
@@ -154,3 +163,60 @@ exports.update = (req, res) => {
         })
     })
 }
+
+/**
+     * Get the list of all the products under a category
+     */
+exports.getProductsUnderCategory = (req, res) => {
+    const categoryId = parseInt(req.params.categoryId);
+
+    Product.findAll({
+        where: {
+            categoryId: categoryId
+        }
+    }).then(products => {
+        res.status(200).send(products);
+    }).catch(err => {
+        res.status(500).send({
+            message: "Some Internal error while fetching  products based on the category id "
+        })
+    })
+
+}
+
+
+const validateRequest = (req, res) => {
+
+    /**
+     * Validation of the request body
+     */
+
+    if (!req.body.name) {
+        res.status(400).send({
+            message: "Name of the product can't be empty !"
+        })
+        return;
+    }
+
+    if (req.body.categoryId) {
+        //Check if the category exists, if not return the proper error message
+        Category.findByPk(req.body.categoryId).then(category => {
+            if (!category) {
+                res.status(400).send({
+                    message: `category id passed is not available : ${req.body.categoryId}`
+                })
+            }
+        }).catch(err => {
+            res.status(500).send({
+                message: "Some Internal error while storing the product!"
+            });
+        });
+    } else {
+        res.status(400).send({
+            message: `category id passed is not available `
+        })
+
+        return;
+    }
+}
+

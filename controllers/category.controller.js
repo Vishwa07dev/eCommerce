@@ -12,16 +12,6 @@ const Category = db.category;
  * Create and save a new Category
  */
 exports.create = (req, res) => {
-    /**
-     * Validation of the request body
-     */
-
-    if (!req.body.name) {
-        res.status(400).send({
-            message: "Name of the category can't be empty !"
-        })
-        return;
-    }
 
     /**
      * Creation of the Category object to be stored in the DB
@@ -52,15 +42,15 @@ exports.findAll = (req, res) => {
 
     //Supporting the query param
     let categoryName = req.query.name;
-    let promise ;
-    if(categoryName){
+    let promise;
+    if (categoryName) {
         promise = Category.findAll({
-            where : {
-                name : categoryName
+            where: {
+                name: categoryName
             }
         });
-    }else{
-        promise =  Category.findAll();
+    } else {
+        promise = Category.findAll();
     }
     promise.then(categories => {
         res.status(200).send(categories);
@@ -93,17 +83,6 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
 
     /**
-     * Validation of the request body
-     */
-
-    if (!req.body.name) {
-        res.status(400).send({
-            message: "Name of the category can't be empty !"
-        })
-        return;
-    }
-
-    /**
      * Creation of the Category object to be stored in the DB
      */
     const category = {
@@ -134,22 +113,24 @@ exports.update = (req, res) => {
 /**
  * Delete an existing category based on the category name
  */
- exports.delete = (req, res) => {
+exports.delete = (req, res) => {
     const categoryId = req.params.id;
 
     Category.destroy({
-        where: { 
-            id: categoryId 
+        where: {
+            id: categoryId
         }
     }).then(result => {
         res.status(200).send(
             {
-            message: "Successfully deleted the category"
-        }
+                message: "Successfully deleted the category"
+            }
         );
     }).catch(err => {
         res.status(500).send({
             message: "Some Internal error while deleting the category based on the id"
         })
     })
+
+
 }

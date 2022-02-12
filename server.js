@@ -23,6 +23,10 @@ app.use(bodyParser.json());
  */
 const db = require("./models");
 const Category = db.category;
+const Product = db.product;
+
+//Setting the One to Many relationship between Category and Product
+Category.hasMany(Product); // This will create a foreign key column( categoryId) in Pr
 
 console.log(Category);
 db.sequelize.sync({ force: true }).then(() => {
