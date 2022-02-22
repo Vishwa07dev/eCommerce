@@ -24,6 +24,7 @@ app.use(bodyParser.json());
 const db = require("./models");
 const Category = db.category;
 const Product = db.product;
+const Role = db.role;
 
 //Setting the One to Many relationship between Category and Product
 Category.hasMany(Product); // This will create a foreign key column( categoryId) in Pr
@@ -54,6 +55,19 @@ function init() {
         console.log("Error while initializing ategories table");
     })
 
+
+    /**
+     * Adding roles
+     */
+     Role.create({
+        id:1,
+        name:"user"
+    });
+    Role.create({
+        id:2,
+        name:"admin"
+    })
+
 }
 
 /**
@@ -61,6 +75,7 @@ function init() {
  */
 require('./routes/category.routes')(app);
 require('./routes/product.routes')(app);
+require('./routes/auth.routes')(app);
 
 
 //Starting the server
