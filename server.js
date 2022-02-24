@@ -22,12 +22,15 @@ app.use(bodyParser.json());
  * Initializing the database
  */
 const db = require("./models");
+const userModel = require('./models/user.model');
+const { user } = require('./models');
 const Category = db.category;
 const Product = db.product;
 const Role = db.role;
 
 //Setting the One to Many relationship between Category and Product
 Category.hasMany(Product); // This will create a foreign key column( categoryId) in Pr
+
 
 console.log(Category);
 db.sequelize.sync({ force: true }).then(() => {
@@ -76,6 +79,7 @@ function init() {
 require('./routes/category.routes')(app);
 require('./routes/product.routes')(app);
 require('./routes/auth.routes')(app);
+require('./routes/cart.routes')(app);
 
 
 //Starting the server
