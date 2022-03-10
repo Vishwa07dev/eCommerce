@@ -4,7 +4,11 @@
   "description": "This is the code base for eCommerce back end application",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server",
+    "migrate": "npx sequelize-cli db:migrate",
+    "migrate:reset": "npx sequelize-cli db:migrate:undo:all && npm run migrate",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
+    "pretest": "cross-env NODE_ENV=test npm run migrate:reset"
   },
   "author": "Vishwa Mohan",
   "license": "ISC",
@@ -16,6 +20,12 @@
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
-    "sequelize": "^6.16.1"
+    "sequelize": "^6.16.1",
+    "sequelize-cli": "^6.4.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^27.5.1",
+    "supertest": "^6.2.2"
   }
 }
