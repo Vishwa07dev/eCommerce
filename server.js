@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 
 // initiaizing express
 const app = express();
+const cors = require('cors');
 
 
 /**
@@ -15,6 +16,11 @@ const app = express();
  * */
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+/**
+ * Configuring CORS
+ */
+app.use(cors());
 
 
 
@@ -49,6 +55,10 @@ function init() {
         {
             name: "KitchenItems",
             description: "This category will contain all the Kitchen related products"
+        },
+        {
+            name: "Sports",
+            description: "This category will contain all the Sports related products"
         }
     ];
 
@@ -58,6 +68,65 @@ function init() {
         console.log("Error while initializing ategories table");
     })
 
+    /**
+     * Creating products
+     */
+    Product.create({
+        name : "iPhone15",
+        description : "Apple product",
+        cost : 89000,
+        categoryId : 1
+
+    });
+    Product.create({
+        name : "s21",
+        description : "Samsung product",
+        cost : 65000,
+        categoryId : 1
+
+    });
+    Product.create({
+        name : "Mi12",
+        description : "Redme product",
+        cost : 15000,
+        categoryId : 1
+
+    });
+    Product.create({
+        name : "Prestige Stove",
+        description : "Cooking stove",
+        cost : 14500,
+        categoryId : 2
+
+    });
+    Product.create({
+        name : "PrestigeKitchenSet",
+        description : "All you need for cooking",
+        cost : 25500,
+        categoryId : 2
+
+    });
+    Product.create({
+        name : "SG Bat",
+        description : "Cricket bat",
+        cost : 25500,
+        categoryId : 3
+
+    });
+    Product.create({
+        name : "SG Bal",
+        description : "Cricket ball",
+        cost : 500,
+        categoryId : 3
+
+    });
+    Product.create({
+        name : "Cricket Batting Pad",
+        description : "Batting pad",
+        cost : 1500,
+        categoryId : 3
+
+    });
 
     /**
      * Adding roles
