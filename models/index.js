@@ -13,7 +13,7 @@ const env = process.env.NODE_ENV || 'development';
 const config = require("../configs/db.config")[env];
 const Sequelize = require("sequelize");
 
-console.log("ENV: " + env);
+//console.log("ENV: " + env);
  
 /**
  * Creating the DB connection

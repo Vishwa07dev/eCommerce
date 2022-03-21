@@ -1,6 +1,6 @@
-const db = require('../../models');
+const db = require('../../../models');
 const ProductModel = db.product;
-const ProductController = require('../../controllers/product.controller');
+const ProductController = require('../../../controllers/product.controller');
 const { mockRequest, mockResponse } = require('../interceptor');
 
 let req, res;

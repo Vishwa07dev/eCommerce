@@ -1,4 +1,5 @@
 const app = require('./app');
+const serverConfig = require('./configs/server.config');
 
 //Starting the server
 app.listen(serverConfig.PORT, () => {
