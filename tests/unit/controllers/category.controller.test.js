@@ -55,7 +55,9 @@ describe('CategoryController.findAll', () => {
                         () => Promise.resolve(newCategory)
                      );
 
-      req.query.name = '';
+      req.query= {
+         name : ''
+      };
       await CategoryController.findAll(req, res);
 
       expect(spy).toHaveBeenCalled();
